@@ -1,5 +1,9 @@
 "use client";
+import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
+import { CiMicrophoneOn } from "react-icons/ci";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import gif from "../public/speaker.gif";
 
 const AudioRecorderComponent = () => {
   const [isRecording, setIsRecording] = useState(false);
@@ -169,42 +173,67 @@ const AudioRecorderComponent = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center h-screen w-full bg-gray-100">
-      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+    <div className="flex flex-col items-center justify-center h-screen w-full bg-gray-100">
+      <h1 className="text-3xl font-bold text-blue-500">QuickSupport Agent</h1>
+      <div className="w-full max-w-md p-8 ">
         <div className="flex justify-center space-x-8">
-          <button
-            onClick={handleToggleRecording}
-            disabled={isPlaying || isLoading}
-            className={`flex items-center justify-center rounded-full w-20 h-20 focus:outline-none transition-all duration-300 ${
-              isRecording
-                ? "bg-red-500 hover:bg-red-600"
-                : isPlaying || isLoading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-blue-500 hover:bg-blue-600"
-            } ${isPlaying || isLoading ? "opacity-50" : "opacity-100"}`}
-          >
-            {isRecording ? (
-              <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-              </svg>
-            ) : (
-              <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-              </svg>
-            )}
-          </button>
+          {isLoading ? (
+            <div>
+              <div className="p-4 flex items-center justify-center">
+                <style jsx>{`
+                  @keyframes loadCharacters {
+                    0% { content: "T"; }
+                    10% { content: "Th"; }
+                    20% { content: "Thi"; }
+                    30% { content: "Thin"; }
+                    40% { content: "Think"; }
+                    50% { content: "Thinki"; }
+                    60% { content: "Thinkin"; }
+                    70% { content: "Thinking"; }
+                    80% { content: "Thinking."; }
+                    90% { content: "Thinking.."; }
+                    100% { content: "Thinking..."; }
+                  }
+                  .animate-ai-thinking::after {
+                    content: "";
+                    animation: loadCharacters 1.3s steps(11) infinite;
+                  }
+                  .code-font {
+                    font-family: 'Courier New', Courier, monospace;
+                  }
+                `}</style>
+                <span className="animate-ai-thinking text-2xl font-bold text-blue-500 flex code-font">
+                  <span className="sr-only">Thinking...</span>
+                </span>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={handleToggleRecording}
+              disabled={isPlaying || isLoading}
+              className={`flex items-center justify-center rounded-full w-20 h-20 focus:outline-none transition-all duration-300 ${
+                isRecording
+                  ? "bg-red-500 hover:bg-red-600"
+                  : isPlaying || isLoading
+                  ? "hidden"
+                  : "shadow-2xl bg-blue-400 hover:bg-blue-500"
+              } ${isPlaying || isLoading ? "opacity-50" : "opacity-100"}`}
+            >
+              {isRecording ? (
+                <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                </svg>
+              ) : (
+                <CiMicrophoneOn size={46} />
+              )}
+            </button>
+          )}
 
           <div
-            className={`flex items-center justify-center rounded-full w-20 h-20 transition-all duration-300 ${
-              isPlaying
-                ? "bg-green-500"
-                : "bg-gray-400"
-            } ${isPlaying ? "opacity-100" : "opacity-50"}`}
+            className={`flex items-center justify-center rounded-full w-20 h-20 transition-all duration-300 border-2 border-blue-50 bg-white shadow-2xl ${isPlaying ? "" : "hidden"}`}
           >
-            <svg className={`w-12 h-12 text-white transform ${isPlaying ? "scale-90" : "scale-100"} transition-transform duration-200`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-            </svg>
+            <Image src={gif} alt="Play" width={48} height={48} />
           </div>
         </div>
       </div>
